@@ -12,6 +12,16 @@ struct Menu
 	QString mainCourseVeg;
 	//
 	QString sideDish;
+
+	std::string toString() const {
+			return (firstCourse + "\n"
+				+ brothCourse + "\n"
+				+ mainCourseMeat + "\n"
+				+ mainCourseFish + "\n"
+				+ mainCourseVeg + "\n"
+				+ sideDish).toStdString();
+		}
+
 };
 
 #endif // MENUDEFS_H

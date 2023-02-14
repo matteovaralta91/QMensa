@@ -8,16 +8,13 @@ MenuReader::MenuReader(QString xlsxName, QDate firstMonday)
 {
 }
 
-void MenuReader::readFile()
+bool MenuReader::readFile()
 {
 	doc = std::make_unique<QXlsx::Document>(xlsxName);
 	if (!doc->load())
-		return;
-
-	int row = 1; int col = 1;
-	QVariant var = doc->read( row, col );
-	// check type of var for more information
-	qDebug() << var.toString();
+	{
+		return false;
+	}
 
 	// get full cells of current sheet
 	int maxRow = -1;
@@ -30,22 +27,31 @@ void MenuReader::readFile()
 		for (int cc = 1; cc <= maxCol; cc++)
 		{
 			QString cellStr = doc->read( rc, cc ).toString();
-			qDebug() << "( row : " << rc
-					 << ", col : " << cc
-					 << ") " << doc->read( rc, cc ); // display cell value
 
 			if (cellStr == "SETTIMANA 1")
 			{
-				int week = 0;
 				qInfo() << "Settimana 1 founded";
-				menus.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), rc, cc + 1));
-				menus.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), rc, cc + 2));
-				menus.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), rc, cc + 3));
-				menus.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), rc, cc + 4));
-				menus.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), rc, cc + 5));
+				menus.insert(getWeekMenu(firstMonday, rc, cc, 0));
+			}
+			else if (cellStr == "SETTIMANA 2")
+			{
+				qInfo() << "Settimana 2 founded";
+				menus.insert(getWeekMenu(firstMonday, rc, cc, 1));
+			}
+			else if (cellStr == "SETTIMANA 3")
+			{
+				qInfo() << "Settimana 3 founded";
+				menus.insert(getWeekMenu(firstMonday, rc, cc, 2));
+			}
+			else if (cellStr == "SETTIMANA 4")
+			{
+				qInfo() << "Settimana 4 founded";
+				menus.insert(getWeekMenu(firstMonday, rc, cc, 3));
 			}
 		}
 	}
+
+	return true;
 }
 
 QMap<QDate, Menu> MenuReader::getAllMenus()
@@ -72,5 +78,12 @@ QMap<QDate, Menu> MenuReader::getDayMenu(QDate day, int row, int col)
 QMap<QDate, Menu> MenuReader::getWeekMenu(QDate day, int row, int col, int week)
 {
 	QMap<QDate, Menu> weekMenu;
+
+	weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row, col + 1));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row, col + 2));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row, col + 3));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row, col + 4));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row, col + 5));
+
 	return weekMenu;
 }

@@ -4,6 +4,7 @@
 #include <QMap>
 
 #include "menureader.h"
+#include "telegrammanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +16,13 @@ int main(int argc, char *argv[])
 	QDate monday = QDate::fromString(mondayStr, Qt::ISODate);
 
 	MenuReader menu("menu.xlsx", monday);
-	menu.readFile();
+	if (!menu.readFile())
+	{
+		qWarning() << "menu.xlsx file not found";
+		return -1;
+	}
 	QMap<QDate, Menu> menus = menu.getAllMenus();
-	return a.exec();
+
+	TelegramManager tm(menus);
+	tm.loop();
 }

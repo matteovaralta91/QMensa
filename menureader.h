@@ -11,7 +11,7 @@ class MenuReader
 {
 public:
 	MenuReader(QString xlsxName, QDate firstMonday);
-	void readFile();
+	bool readFile();
 	QMap<QDate, Menu> getAllMenus();
 
 private:
