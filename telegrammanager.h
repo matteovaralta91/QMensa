@@ -55,6 +55,8 @@ public:
 	void loop();
 
 private:
+ void sendMessages(QMap<QDate, Menu> menus, int64_t chat_id, bool isPrevEvening);
+
  QMap<QDate, Menu> menus;
  using Object = td_api::object_ptr<td_api::Object>;
  std::unique_ptr<td::ClientManager> client_manager_;

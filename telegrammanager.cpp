@@ -18,7 +18,7 @@ void TelegramManager::loop()
 			process_response(client_manager_->receive(10));
 		  } else {
 			std::cout << "Enter action [q] quit [u] check for updates and request results [c] show chats [m <chat_id> "
-						 "<text>] send message [menu <chat_id>] send scheduled menu to channel [me] show self [l] logout: "
+						 "<text>] send message [menu <chat_id> <prev_day_chat_id>] send scheduled menu to channel [me] show self [l] logout: "
 					  << std::endl;
 			std::string line;
 			std::getline(std::cin, line);
@@ -65,36 +65,17 @@ void TelegramManager::loop()
 			  send_message->input_message_content_ = std::move(message_content);
 			  send_query(std::move(send_message), {});
 			} else if (action == "menu") {
-			  std::int64_t chat_id;
+			  std::int64_t chat_id, prev_day_chat_id;
 			  ss >> chat_id;
+			  ss.get();
+			  ss >> prev_day_chat_id;
 			  ss.get();
 
 			  std::cout << "Sending all menus to chat " << chat_id << "..." << std::endl;
+			  sendMessages(menus, chat_id, false);
 
-			  foreach (auto day, menus.keys())
-			  {
-				  if (day > QDate::currentDate())
-				  {
-					  std::cout << "Preparing message for" << day.toString().toStdString() << std::endl;
-					  auto send_message = td_api::make_object<td_api::sendMessage>();
-					  send_message->chat_id_ = chat_id;
-					  auto message_content = td_api::make_object<td_api::inputMessageText>();
-					  message_content->text_ = td_api::make_object<td_api::formattedText>();
-					  message_content->text_->text_ = menus.value(day).toString();
-					  send_message->input_message_content_ = std::move(message_content);
-
-					  QDateTime noon = QDateTime(day, QTime(12, 0));
-					  auto sched = td_api::make_object<td_api::messageSchedulingStateSendAtDate>(noon.toSecsSinceEpoch());
-					  auto opt = td_api::make_object<td_api::messageSendOptions>();
-					  opt->scheduling_state_ = std::move(sched);
-					  send_message->options_ = std::move(opt);
-
-					  std::cout << "Message sending..." << std::endl;
-					  send_query(std::move(send_message), {});
-
-					  std::cout << "Message send" << std::endl;
-				  }
-			  }
+			  std::cout << "Sending all menus to chat " << chat_id << " (previous day)..." << std::endl;
+			  sendMessages(menus, prev_day_chat_id, true);
 
 			} else if (action == "c") {
 			  std::cout << "Loading chat list..." << std::endl;
@@ -109,7 +90,40 @@ void TelegramManager::loop()
 			  });
 			}
 		  }
+	}
+}
+
+void TelegramManager::sendMessages(QMap<QDate, Menu> menus, int64_t chat_id, bool isPrevEvening)
+{
+	foreach (auto day, menus.keys())
+	{
+		if (day > QDate::currentDate())
+		{
+			std::cout << "Preparing message for" << day.toString().toStdString() << std::endl;
+			auto send_message = td_api::make_object<td_api::sendMessage>();
+			send_message->chat_id_ = chat_id;
+			auto message_content = td_api::make_object<td_api::inputMessageText>();
+			message_content->text_ = td_api::make_object<td_api::formattedText>();
+			message_content->text_->text_ = menus.value(day).toString();
+			send_message->input_message_content_ = std::move(message_content);
+
+			QDateTime scheduledHour = QDateTime(day, QTime(12, 0)); // 12:00 same day
+			if (isPrevEvening)
+			{
+				scheduledHour = QDateTime(day.addDays(-1), QTime(19, 0));  // 19:00 previous day
+			}
+
+			auto sched = td_api::make_object<td_api::messageSchedulingStateSendAtDate>(scheduledHour.toSecsSinceEpoch());
+			auto opt = td_api::make_object<td_api::messageSendOptions>();
+			opt->scheduling_state_ = std::move(sched);
+			send_message->options_ = std::move(opt);
+
+			std::cout << "Message sending..." << std::endl;
+			send_query(std::move(send_message), {});
+
+			std::cout << "Message send" << std::endl;
 		}
+	}
 }
 
 void TelegramManager::restart()
