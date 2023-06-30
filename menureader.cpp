@@ -63,12 +63,14 @@ QMap<QDate, Menu> MenuReader::getDayMenu(QDate day, int row, int col)
 {
 	QMap<QDate, Menu> dayMenu;
 	Menu menu;
-	menu.firstCourse = doc->read(row + 1, col).toString();
-	menu.brothCourse = doc->read(row + 2, col).toString();
-	menu.mainCourseMeat = doc->read(row + 3, col).toString();
-	menu.mainCourseFish = doc->read(row + 4, col).toString();
-	menu.mainCourseVeg = doc->read(row + 5, col).toString();
-	menu.sideDish = doc->read(row + 6, col).toString();
+    menu.firstColdCourse = doc->read(row + 1, col).toString();
+    menu.firstCourse = doc->read(row + 2, col).toString();
+    menu.brothCourse = doc->read(row + 3, col).toString();
+    menu.mainCourseMeat = doc->read(row + 4, col).toString();
+    menu.mainCourseFish = doc->read(row + 5, col).toString();
+    menu.mainCourseVeg = doc->read(row + 6, col).toString();
+    menu.sideDish = doc->read(row + 7, col).toString();
+    menu.ethnicDish = doc->read(row + 8, col).toString();
 
 	dayMenu.insert(day, menu);
 
@@ -80,10 +82,10 @@ QMap<QDate, Menu> MenuReader::getWeekMenu(QDate day, int row, int col, int week)
 	QMap<QDate, Menu> weekMenu;
 
 	weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row + 0, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row + 7, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row + 14, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row + 21, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row + 28, col));
+    weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row + 8, col));
+    weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row + 16, col));
+    weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row + 24, col));
+    weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row + 32, col));
 
 	return weekMenu;
 }

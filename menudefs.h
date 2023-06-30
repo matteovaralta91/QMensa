@@ -2,24 +2,37 @@
 #define MENUDEFS_H
 
 #include <QString>
+
+static QString capitalizeFirst(QString str)
+{
+    QString tmpStr = str.toLower();
+    tmpStr[0] = tmpStr[0].toUpper();
+    return tmpStr;
+}
+
 struct Menu
 {
-	QString firstCourse;
+    QString firstColdCourse;
+    QString firstCourse;
 	QString brothCourse;
 	//
 	QString mainCourseMeat;
 	QString mainCourseFish;
 	QString mainCourseVeg;
 	//
-	QString sideDish;
+    QString sideDish;
+    QString ethnicDish;
 
 	std::string toString() const {
-			return (firstCourse + "\n"
-				+ brothCourse + "\n"
-				+ mainCourseMeat + "\n"
-				+ mainCourseFish + "\n"
-				+ mainCourseVeg + "\n"
-				+ sideDish).toStdString();
+        QString tmpStr = (capitalizeFirst(firstColdCourse) + "\n"
+                + capitalizeFirst(firstCourse) + "\n"
+                + capitalizeFirst(brothCourse) + "\n"
+                + capitalizeFirst(mainCourseMeat) + "\n"
+                + capitalizeFirst(mainCourseFish) + "\n"
+                + capitalizeFirst(mainCourseVeg) + "\n"
+                + capitalizeFirst(sideDish) + "\n"
+                + capitalizeFirst(ethnicDish));
+            return tmpStr.toStdString();
 		}
 
 };
