@@ -81,11 +81,11 @@ QMap<QDate, Menu> MenuReader::getWeekMenu(QDate day, int row, int col, int week)
 {
 	QMap<QDate, Menu> weekMenu;
 
-	weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row + 0, col));
-    weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row + 8, col));
-    weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row + 16, col));
-    weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row + 24, col));
-    weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row + 32, col));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row, col + 1));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row, col + 2));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row, col + 3));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row, col + 4));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row, col + 5));
 
 	return weekMenu;
 }
