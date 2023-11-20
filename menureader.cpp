@@ -83,6 +83,7 @@ QMap<QDate, Menu> MenuReader::getWeekMenu(QDate day, int row, int col, int week)
 {
 	QMap<QDate, Menu> weekMenu;
     const int dishes = 7;
+	row = row -2;
 
     weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row + 0 * dishes, col));
     weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row + 1 * dishes, col));
