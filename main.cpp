@@ -9,13 +9,16 @@
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
+	QTextStream s(stdin);
 
 	qInfo() << "Please insert first monday of the month (format: YYYY-MM-DD): ";
-	QTextStream s(stdin);
 	QString mondayStr = s.readLine();
 	QDate monday = QDate::fromString(mondayStr, Qt::ISODate);
 
-	MenuReader menu("menu.xlsx", monday);
+	qInfo() << "Please insert the number of dishes: ";
+	int numDishes = QString(s.readLine()).toInt();
+
+	MenuReader menu("menu.xlsx", monday, numDishes);
 	if (!menu.readFile())
 	{
 		qWarning() << "menu.xlsx file not found";

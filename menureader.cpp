@@ -3,8 +3,8 @@
 
 using namespace QXlsx;
 
-MenuReader::MenuReader(QString xlsxName, QDate firstMonday)
-	: xlsxName(xlsxName), firstMonday(firstMonday)
+MenuReader::MenuReader(QString xlsxName, QDate firstMonday, int numDishes)
+	: xlsxName(xlsxName), firstMonday(firstMonday), numDishes(numDishes)
 {
 }
 
@@ -80,14 +80,11 @@ QMap<QDate, Menu> MenuReader::getDayMenu(QDate day, int row, int col)
 QMap<QDate, Menu> MenuReader::getWeekMenu(QDate day, int row, int col, int week)
 {
 	QMap<QDate, Menu> weekMenu;
-	const int dishes = 8;
-	//row = row -2;
-
-	weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row + 1 + 0 * dishes, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row + 1 + 1 * dishes, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row + 1 + 2 * dishes, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row + 1 + 3 * dishes, col));
-	weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row + 1 + 4 * dishes, col));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(0 + 7 * week), row + 1 + 0 * numDishes, col));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(1 + 7 * week), row + 1 + 1 * numDishes, col));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(2 + 7 * week), row + 1 + 2 * numDishes, col));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(3 + 7 * week), row + 1 + 3 * numDishes, col));
+	weekMenu.insert(getDayMenu(firstMonday.addDays(4 + 7 * week), row + 1 + 4 * numDishes, col));
 
 	return weekMenu;
 }
