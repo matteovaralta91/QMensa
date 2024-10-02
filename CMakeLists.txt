@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
-find_package(Td 1.8.17 REQUIRED PATHS ./tdlib)
+find_package(Td 1.8.36 REQUIRED PATHS ./tdlib)
 
 add_subdirectory(QXlsx)
 
