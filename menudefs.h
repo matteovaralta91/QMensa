@@ -5,6 +5,8 @@
 
 static QString capitalizeFirst(QString str)
 {
+	if (str == "")
+		return "";
     QString tmpStr = str.toLower();
     tmpStr[0] = tmpStr[0].toUpper();
     return tmpStr;

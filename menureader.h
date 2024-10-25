@@ -10,7 +10,7 @@
 class MenuReader
 {
 public:
-	MenuReader(QString xlsxName, QDate firstMonday);
+	MenuReader(QString xlsxName, QDate firstMonday, int numDishes);
 	bool readFile();
 	QMap<QDate, Menu> getAllMenus();
 
@@ -20,6 +20,7 @@ private:
 
 	QString xlsxName;
 	QDate firstMonday;
+	int numDishes;
 	std::unique_ptr<QXlsx::Document> doc;
 
 	QMap<QDate, Menu> menus;
